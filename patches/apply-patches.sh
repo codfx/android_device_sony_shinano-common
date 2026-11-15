@@ -21,6 +21,7 @@ declare -A PATCH_MAP=(
     ["external_skia"]="external/skia"
     ["frameworks_av"]="frameworks/av"
     ["frameworks_base"]="frameworks/base"
+    ["frameworks_ex"]="frameworks/ex"
     ["frameworks_native"]="frameworks/native"
     ["frameworks_opt_telephony"]="frameworks/opt/telephony"
     ["hardware_broadcom_fm"]="hardware/broadcom/fm"

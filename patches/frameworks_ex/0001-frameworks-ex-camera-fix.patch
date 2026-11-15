@@ -1,0 +1,50 @@
+diff --git a/camera2/portability/src/com/android/ex/camera2/portability/AndroidCameraAgentImpl.java b/camera2/portability/src/com/android/ex/camera2/portability/AndroidCameraAgentImpl.java
+index a2b6299..643632e 100644
+--- a/camera2/portability/src/com/android/ex/camera2/portability/AndroidCameraAgentImpl.java
++++ b/camera2/portability/src/com/android/ex/camera2/portability/AndroidCameraAgentImpl.java
+@@ -285,15 +285,21 @@ class AndroidCameraAgentImpl extends CameraAgent {
+         }
+ 
+         private void startFaceDetection() {
+-            mCamera.startFaceDetection();
++            if (mCamera != null) {
++                mCamera.startFaceDetection();
++            }
+         }
+ 
+         private void stopFaceDetection() {
+-            mCamera.stopFaceDetection();
++            if (mCamera != null) {
++                mCamera.stopFaceDetection();
++            }
+         }
+ 
+         private void setFaceDetectionListener(FaceDetectionListener listener) {
+-            mCamera.setFaceDetectionListener(listener);
++            if (mCamera != null) {
++                mCamera.setFaceDetectionListener(listener);
++            }
+         }
+ 
+         private void setPreviewTexture(Object surfaceTexture) {
+@@ -356,6 +362,12 @@ class AndroidCameraAgentImpl extends CameraAgent {
+             Log.v(TAG, "handleMessage - action = '" + CameraActions.stringify(msg.what) + "'");
+ 
+             int cameraAction = msg.what;
++            if (mCamera == null && cameraAction != CameraActions.OPEN_CAMERA
++                    && cameraAction != CameraActions.RELEASE) {
++                Log.w(TAG, "Ignoring cameraAction " + CameraActions.stringify(cameraAction)
++                        + " because mCamera is null");
++                return;
++            }
+             try {
+                 switch (cameraAction) {
+                     case CameraActions.OPEN_CAMERA: {
+@@ -630,6 +642,7 @@ class AndroidCameraAgentImpl extends CameraAgent {
+                         mCamera = null;
+                     }
+                 }
++                mCameraState.setState(AndroidCameraStateHolder.CAMERA_UNOPENED);
+ 
+                 // Invoke error callback.
+                 if (msg.what == CameraActions.OPEN_CAMERA && mCamera == null) {

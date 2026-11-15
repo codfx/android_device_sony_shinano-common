@@ -1,0 +1,44 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: mgiannetta <marcogiannetta96@gmail.com>
+Date: Sun, 15 Nov 2026 15:59:00 +0100
+Subject: [PATCH] vold: Ignore lsetfilecon EOPNOTSUPP when SELinux is permissive/disabled
+
+On legacy kernels without an active SELinux policy loaded, lgetfilecon
+returns "unlabeled" and lsetfilecon fails with EOPNOTSUPP, causing
+vold_prepare_subdirs (and init_user0) to abort and preventing /data/user_de/0
+from being created.
+
+---
+ vold_prepare_subdirs.cpp | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/vold_prepare_subdirs.cpp b/vold_prepare_subdirs.cpp
+index ca8e3f6..93fc9af 100644
+--- a/vold_prepare_subdirs.cpp
++++ b/vold_prepare_subdirs.cpp
+@@ -34,6 +34,7 @@
+ 
+ #include <cutils/fs.h>
+ #include <selinux/android.h>
++#include <selinux/selinux.h>
+ 
+ #include "Utils.h"
+ #include "android/os/IVold.h"
+@@ -98,8 +99,13 @@ static bool prepare_dir_for_user(struct selabel_handle* sehandle, mode_t mode, u
+             LOG(INFO) << "Relabelling from " << ((char*)oldsecontext.get()) << " to "
+                       << ((char*)secontext.get()) << ": " << path;
+             if (lsetfilecon(path.c_str(), secontext.get()) != 0) {
+-                PLOG(ERROR) << "Relabelling failed for: " << path;
+-                return false;
++                if ((errno == EOPNOTSUPP || errno == ENOTSUP) && security_getenforce() <= 0) {
++                    PLOG(WARNING) << "Ignoring relabel failure in permissive/disabled SELinux mode for: "
++                                  << path;
++                } else {
++                    PLOG(ERROR) << "Relabelling failed for: " << path;
++                    return false;
++                }
+             }
+         }
+     }
+-- 
+2.43.0

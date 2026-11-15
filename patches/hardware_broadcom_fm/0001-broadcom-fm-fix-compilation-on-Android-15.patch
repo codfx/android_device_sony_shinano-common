@@ -1,17 +1,3 @@
-From e3b3afc02663db40997473389ac127ae6134bfd1 Mon Sep 17 00:00:00 2001
-From: mgiannetta <marcogiannetta96@gmail.com>
-Date: Tue, 3 Nov 2026 17:20:59 +0100
-Subject: [PATCH] broadcom/fm: fix compilation on Android 15
-
-Change-Id: I2b7d49ddbb744475d07d269da190723c5c1a6d7f
----
- Android.mk                   | 5 +++--
- brcm-uim-sysfs/uim.c         | 2 +-
- brcm-uim-sysfs/upio.c        | 2 +-
- fmradio.v4l2-fm/v4l2_fm.c    | 2 +-
- fmradio.v4l2-fm/v4l2_ioctl.c | 2 +-
- 5 files changed, 7 insertions(+), 6 deletions(-)
-
 diff --git a/Android.mk b/Android.mk
 index 9e008d2..6b0fe86 100644
 --- a/Android.mk
@@ -27,6 +13,19 @@ index 9e008d2..6b0fe86 100644
 +include $(FM_PATH)/fmradio.v4l2-fm/Android.mk
  
  endif
+diff --git a/brcm-uim-sysfs/include/uim.h b/brcm-uim-sysfs/include/uim.h
+index fcec88a..5bc884a 100755
+--- a/brcm-uim-sysfs/include/uim.h
++++ b/brcm-uim-sysfs/include/uim.h
+@@ -182,7 +182,7 @@ int st_uart_config(unsigned char install);
+ int proc_hci_reset();
+ extern int upio_set_bluetooth_power(int on);
+ int proc_hci_uartclockset();
+-void read_default_bdaddr();
++void read_default_bdaddr(bdaddr_t *local_addr);
+ int proc_bdaddr();
+ 
+ #endif /* UIM_H */
 diff --git a/brcm-uim-sysfs/uim.c b/brcm-uim-sysfs/uim.c
 index 3c30411..f66e70a 100755
 --- a/brcm-uim-sysfs/uim.c
@@ -79,6 +78,3 @@ index f705b1b..96a3d60 100644
  #endif
  
  #include "v4l2_ioctl.h"
--- 
-2.53.0
-

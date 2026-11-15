@@ -25,3 +25,17 @@ index bea6391..02883a7 100644
  
  # Verified Boot
  BOARD_AVB_SYSTEM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+diff --git a/qcom_boards.mk b/qcom_boards.mk
+index 62ae73d..3f05dd2 100644
+--- a/qcom_boards.mk
++++ b/qcom_boards.mk
+@@ -1,7 +1,8 @@
+ # Board platforms lists to be used for
+ # TARGET_BOARD_PLATFORM specific featurization
+ 
+-# UM 3.18
++# UM 3.18 / Legacy
++QCOM_BOARD_PLATFORMS += msm8974
+ QCOM_BOARD_PLATFORMS += msm8937
+ QCOM_BOARD_PLATFORMS += msm8953
+ QCOM_BOARD_PLATFORMS += msm8996

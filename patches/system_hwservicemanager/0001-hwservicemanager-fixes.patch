@@ -1,0 +1,42 @@
+diff --git a/AccessControl.cpp b/AccessControl.cpp
+index c8366ca..beda395 100644
+--- a/AccessControl.cpp
++++ b/AccessControl.cpp
+@@ -19,6 +19,7 @@
+ #include <android-base/logging.h>
+ #include <hidl-util/FQName.h>
+ #include <log/log.h>
++#include <selinux/selinux.h>
+ 
+ #include "AccessControl.h"
+ 
+@@ -76,6 +77,9 @@ bool AccessControl::canGet(const std::string& fqName, const CallingContext& call
+ }
+ 
+ bool AccessControl::canList(const CallingContext& callingContext) {
++    if (security_getenforce() <= 0) {
++        return true;
++    }
+     return checkPermission(callingContext, mSeContext, kPermissionList, nullptr);
+ }
+ 
+@@ -93,6 +97,9 @@ AccessControl::CallingContext AccessControl::getCallingContext(pid_t sourcePid)
+ }
+ 
+ bool AccessControl::checkPermission(const CallingContext& source, const char *targetContext, const char *perm, const char *interface) {
++    if (security_getenforce() <= 0) {
++        return true;
++    }
+     if (!source.sidPresent) {
+         return false;
+     }
+@@ -111,6 +118,9 @@ bool AccessControl::checkPermission(const CallingContext& source, const char *ta
+ }
+ 
+ bool AccessControl::checkPermission(const CallingContext& source, const char *perm, const char *interface) {
++    if (security_getenforce() <= 0) {
++        return true;
++    }
+     char *targetContext = nullptr;
+     bool allowed = false;
+ 

@@ -1,0 +1,13 @@
+diff --git a/core/Makefile b/core/Makefile
+index b8c4189..471155e 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -5679,7 +5679,7 @@ $(check_vintf_compatible_log): $(HOST_OUT_EXECUTABLES)/checkvintf $(check_vintf_
+ 	  ( $< --check-compat $(PRIVATE_CHECK_VINTF_ARGS) \
+ 	       --property ro.boot.product.hardware.sku=$(filter-out EMPTY_ODM_SKU_PLACEHOLDER,$(odm_sku)) \
+ 	       --property ro.boot.product.vendor.sku=$(filter-out EMPTY_VENDOR_SKU_PLACEHOLDER,$(vendor_sku)) \
+-	       >> $@ 2>&1 ) || (cat $@ && exit 1); ))
++	       >> $@ 2>&1 ) || (cat $@ && $(if $(filter true,$(PRODUCT_IGNORE_CHECK_VINTF_COMPAT_ERRORS)),true,exit 1)); ))
+ 
+ $(call declare-1p-target,$(check_vintf_compatible_log))
+ 

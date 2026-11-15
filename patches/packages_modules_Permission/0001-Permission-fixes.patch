@@ -1,0 +1,24 @@
+diff --git a/PermissionController/src/com/android/permissioncontroller/permission/utils/PermissionMapping.kt b/PermissionController/src/com/android/permissioncontroller/permission/utils/PermissionMapping.kt
+index a8d5806..b48ac87 100644
+--- a/PermissionController/src/com/android/permissioncontroller/permission/utils/PermissionMapping.kt
++++ b/PermissionController/src/com/android/permissioncontroller/permission/utils/PermissionMapping.kt
+@@ -287,13 +287,16 @@ object PermissionMapping {
+     fun getPlatformPermissionsOfGroup(pm: PackageManager, group: String): List<PermissionInfo> {
+         val permInfos = mutableListOf<PermissionInfo>()
+         for (permName in PLATFORM_PERMISSION_GROUPS[group] ?: emptyList()) {
+-            val permInfo: PermissionInfo =
++            val permInfo: PermissionInfo? =
+                 try {
+                     pm.getPermissionInfo(permName, 0)
+                 } catch (e: PackageManager.NameNotFoundException) {
+-                    throw IllegalStateException("$permName not defined by platform", e)
++                    Log.w(LOG_TAG, "$permName not defined by platform, skipping", e)
++                    null
+                 }
+-            permInfos.add(permInfo)
++            if (permInfo != null) {
++                permInfos.add(permInfo)
++            }
+         }
+         return permInfos
+     }

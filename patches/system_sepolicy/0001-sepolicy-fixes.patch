@@ -1,0 +1,13 @@
+diff --git a/Android.bp b/Android.bp
+index 7c667c8..b5f4795 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -1252,6 +1252,8 @@ phony {
+     ), {
+         (true, true): [
+         ],
++        (default, true): [
++        ],
+         (default, default): [
+             "sepolicy_compat_test",
+             "sepolicy_test",

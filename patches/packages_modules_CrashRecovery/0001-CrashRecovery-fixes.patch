@@ -1,0 +1,119 @@
+diff --git a/service/java/com/android/server/RescueParty.java b/service/java/com/android/server/RescueParty.java
+index 1b4046a..cdde3fd 100644
+--- a/service/java/com/android/server/RescueParty.java
++++ b/service/java/com/android/server/RescueParty.java
+@@ -152,39 +152,7 @@ public class RescueParty {
+     }
+ 
+     private static boolean isDisabled() {
+-        // Check if we're explicitly enabled for testing
+-        if (SystemProperties.getBoolean(PROP_ENABLE_RESCUE, false)) {
+-            return false;
+-        }
+-
+-        // We're disabled if the DeviceConfig disable flag is set to true.
+-        // This is in case that an emergency rollback of the feature is needed.
+-        if (SystemProperties.getBoolean(PROP_DEVICE_CONFIG_DISABLE_FLAG, false)) {
+-            Slog.v(TAG, "Disabled because of DeviceConfig flag");
+-            return true;
+-        }
+-
+-        // We're disabled on all engineering devices
+-        if (Build.TYPE.equals("eng")) {
+-            Slog.v(TAG, "Disabled because of eng build");
+-            return true;
+-        }
+-
+-        // We're disabled on userdebug devices connected over USB, since that's
+-        // a decent signal that someone is actively trying to debug the device,
+-        // or that it's in a lab environment.
+-        if (Build.TYPE.equals("userdebug") && isUsbActive()) {
+-            Slog.v(TAG, "Disabled because of active USB connection");
+-            return true;
+-        }
+-
+-        // One last-ditch check
+-        if (SystemProperties.getBoolean(PROP_DISABLE_RESCUE, false)) {
+-            Slog.v(TAG, "Disabled because of manual property");
+-            return true;
+-        }
+-
+-        return false;
++        return true;
+     }
+ 
+     @VisibleForTesting
+@@ -343,69 +311,14 @@ public class RescueParty {
+ 
+     private static void executeWarmReboot(Context context, int level,
+             @Nullable String failedPackage) {
+-        if (shouldThrottleReboot()) {
+-            return;
+-        }
+-
+-        // Request the reboot from a separate thread to avoid deadlock on PackageWatchdog
+-        // when device shutting down.
+-        setRebootProperty(true);
+-
+-        if (Flags.synchronousRebootInRescueParty()) {
+-            try {
+-                PowerManager pm = context.getSystemService(PowerManager.class);
+-                if (pm != null) {
+-                    pm.reboot(TAG);
+-                }
+-            } catch (Throwable t) {
+-                logRescueException(level, failedPackage, t);
+-            }
+-        } else {
+-            Runnable runnable = () -> {
+-                try {
+-                    PowerManager pm = context.getSystemService(PowerManager.class);
+-                    if (pm != null) {
+-                        pm.reboot(TAG);
+-                    }
+-                } catch (Throwable t) {
+-                    logRescueException(level, failedPackage, t);
+-                }
+-            };
+-            Thread thread = new Thread(runnable);
+-            thread.start();
+-        }
++        Slog.w(TAG, "Warm reboot requested by RescueParty, disabled on this build");
++        return;
+     }
+ 
+     private static void executeFactoryReset(Context context, int level,
+             @Nullable String failedPackage) {
+-        if (shouldThrottleReboot()) {
+-            return;
+-        }
+-        setFactoryResetProperty(true);
+-        long now = System.currentTimeMillis();
+-        setLastFactoryResetTimeMs(now);
+-
+-        if (Flags.synchronousRebootInRescueParty()) {
+-            try {
+-                RecoverySystem.rebootPromptAndWipeUserData(context, TAG + "," + failedPackage);
+-            } catch (Throwable t) {
+-                logRescueException(level, failedPackage, t);
+-            }
+-        } else {
+-            Runnable runnable = new Runnable() {
+-                @Override
+-                public void run() {
+-                    try {
+-                        RecoverySystem.rebootPromptAndWipeUserData(context,
+-                            TAG + "," + failedPackage);
+-                    } catch (Throwable t) {
+-                        logRescueException(level, failedPackage, t);
+-                    }
+-                }
+-            };
+-            Thread thread = new Thread(runnable);
+-            thread.start();
+-        }
++        Slog.w(TAG, "Factory reset requested by RescueParty, disabled on this build");
++        return;
+     }
+ 
+ 

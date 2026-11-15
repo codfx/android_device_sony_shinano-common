@@ -1,0 +1,33 @@
+diff --git a/Android.bp b/Android.bp
+index e57d86e..e3cc321 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -956,3 +956,28 @@ java_library {
+         "frameworks/telephony-common-stub/src/**/*.java",
+     ],
+ }
++
++cc_library_shared {
++    name: "libcamera_client.vendor",
++    stem: "libcamera_client",
++    vendor: true,
++    srcs: ["camera/CameraParameters.cpp"],
++    local_include_dirs: ["camera"],
++    shared_libs: [
++        "libcutils",
++        "liblog",
++        "libutils",
++    ],
++}
++
++cc_library_shared {
++    name: "libmedia.vendor",
++    stem: "libmedia",
++    vendor: true,
++    srcs: ["libmedia/libmedia_compat.cpp"],
++    shared_libs: [
++        "libcutils",
++        "liblog",
++        "libutils",
++    ],
++}

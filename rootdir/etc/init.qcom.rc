@@ -387,7 +387,8 @@ service netmgrd /vendor/bin/netmgrd
     group root wifi wakelock radio inet oem_2950
 
 on property:ro.radio.noril=true
-    stop ril-daemon
+    stop vendor.ril-daemon
+    stop ril-daemon1
     stop netmgrd
 
 service qseecomd /vendor/bin/qseecomd

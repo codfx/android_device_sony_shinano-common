@@ -1,0 +1,21 @@
+# Sony's camera HAL is HALv1 (device@1.0, passthrough), so its library runs inside
+# cameraserver (mediaserver before Android 7, see mediaserver.te).
+
+# mm-qcamerad daemon sockets (/data/misc/camera/socket_isp, socket_sensor)
+allow cameraserver mm-qcamerad:unix_stream_socket connectto;
+
+# Sony "excal" calibration database (/data/misc/camera/excal_db_*.dat)
+allow cameraserver camera_data_file:dir search;
+allow cameraserver camera_data_file:file rw_file_perms;
+
+# Sony credential manager (same as mediaserver.te)
+allow cameraserver credmgrd_socket:sock_file write;
+allow cameraserver credmgrd:unix_stream_socket connectto;
+
+hal_client_domain(cameraserver, hal_configstore)
+
+allow cameraserver sysfs_graphics:dir search;
+allow cameraserver sysfs_graphics:file r_file_perms;
+
+# The camera provider wrappers read ro.vendor.camera.{wrapper,external}.hal3TrebleMinorVersion
+get_prop(cameraserver, vendor_camera_prop)

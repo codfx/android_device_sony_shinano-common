@@ -4,7 +4,13 @@ include $(CLEAR_VARS)
 LOCAL_MODULE       := fstab.qcom
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
+# A device can supply its own fstab (path from the top of the tree), e.g. when its SD card slot is
+# on another SDCC controller than msm_sdcc.2.
+ifneq ($(TARGET_SHINANO_FSTAB),)
+LOCAL_PREBUILT_MODULE_FILE := $(TARGET_SHINANO_FSTAB)
+else
 LOCAL_SRC_FILES    := etc/fstab.qcom
+endif
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR_ETC)
 include $(BUILD_PREBUILT)
 

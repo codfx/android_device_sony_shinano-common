@@ -1,0 +1,8 @@
+# Copyright (C) 2026 codfx
+# SPDX-License-Identifier: Apache-2.0
+#
+# /data/mediaserver holds data written by audioserver (mic_gain_params_*, Sony audio HAL).
+# Created from a system rc (init domain) instead of init.qcom.rc, so vendor_init needs no
+# access to this core /data type (audioserver_data_file, see sepolicy/file_contexts).
+on post-fs-data
+    mkdir /data/mediaserver 0775 audioserver audioserver

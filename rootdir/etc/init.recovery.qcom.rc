@@ -1,3 +1,11 @@
+on early-init
+    # As in init.qcom.rc: the 3.4 kernel has no cgroup v2, so process groups (uid_N/pid_N) live in a
+    # cgroup v1 cpuacct mount at /sys/fs/cgroup. Without it init cannot kill a service's process
+    # group, and adbd keeps the USB endpoints when sideload starts minadbd.
+    mount cgroup none /sys/fs/cgroup nodev noexec nosuid cpuacct
+    chown system system /sys/fs/cgroup
+    chmod 0755 /sys/fs/cgroup
+
 on fs
     wait /dev/block/platform/msm_sdcc.1
     symlink /dev/block/platform/msm_sdcc.1 /dev/block/bootdevice

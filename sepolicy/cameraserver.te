@@ -17,5 +17,6 @@ hal_client_domain(cameraserver, hal_configstore)
 allow cameraserver sysfs_graphics:dir search;
 allow cameraserver sysfs_graphics:file r_file_perms;
 
-# The camera provider wrappers read ro.vendor.camera.{wrapper,external}.hal3TrebleMinorVersion
+# The camera provider wrappers read ro.vendor.camera.{wrapper,external}.hal3TrebleMinorVersion,
+# libcameraservice reads persist.vendor.camera.privapp.list
 get_prop(cameraserver, vendor_camera_prop)

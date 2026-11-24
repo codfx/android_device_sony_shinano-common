@@ -1,0 +1,7 @@
+# Copyright (C) 2026 codfx
+# SPDX-License-Identifier: Apache-2.0
+
+# Sony's audio HAL (passthrough, runs in audioserver) keeps its mic gain calibration
+# (mic_gain_params_*) in /data/mediaserver, created by init.qcom.rc.
+allow audioserver audioserver_data_file:dir rw_dir_perms;
+allow audioserver audioserver_data_file:file create_file_perms;

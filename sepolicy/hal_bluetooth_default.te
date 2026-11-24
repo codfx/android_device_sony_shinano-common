@@ -1,1 +1,4 @@
 r_dir_file(hal_bluetooth_default, firmware_file)
+
+# libbt-vendor.so reads ro.rfkilldisabled
+get_prop(hal_bluetooth_default, vendor_bluetooth_prop)

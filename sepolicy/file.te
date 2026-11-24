@@ -13,6 +13,9 @@ type credmgrd_firmware, file_type;
 type mlog_qmi, domain;
 type mlog_qmi_exec, exec_type, file_type;
 
+# RIL: qcril's database in /data/misc/radio (see rild.te)
+type rild_qcril_data_file, file_type, data_file_type, core_data_file_type;
+
 # SCD
 type scd, domain;
 type scd_exec, exec_type, file_type;

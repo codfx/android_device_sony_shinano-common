@@ -8,3 +8,6 @@ allow brcm_uim serial_device:chr_file rw_file_perms;
 allow brcm_uim self:capability net_admin;
 
 get_prop(brcm_uim, exported_bluetooth_prop)
+
+# ro.rfkilldisabled.uim
+get_prop(brcm_uim, vendor_bluetooth_prop)

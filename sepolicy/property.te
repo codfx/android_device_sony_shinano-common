@@ -4,4 +4,23 @@ type credmgrd_prop, property_type;
 # Trim Area
 type ta_prop, property_type;
 
-type vendor_camera_prop, property_type;
+# Camera. Also read by cameraserver (coredomain, HALv1 runs in it), so restricted, not internal.
+vendor_restricted_prop(vendor_camera_prop)
+
+# Bluetooth (ro.rfkilldisabled*, read by libbt-vendor and brcm-uim-sysfs)
+vendor_internal_prop(vendor_bluetooth_prop)
+
+# Modem and data stack (qcril, netmgrd, qmuxd and the QMI/dsutils client libraries)
+vendor_internal_prop(vendor_data_prop)
+vendor_internal_prop(vendor_qcril_prop)
+
+# GPS (gps.disable, read by the loc HAL)
+vendor_internal_prop(vendor_gps_prop)
+
+# Sensors (ro.qti.sensors.*, read by the sensors HAL and sensors.qcom)
+vendor_internal_prop(vendor_sensors_prop)
+
+# vendor.post_boot.parsed (sepolicy-legacy declares it as a bare property_type): set by vendor_init and
+# qti_init_shell, read by system_server, so give it the owner attributes of a vendor_restricted_prop.
+typeattribute vendor_mpctl_prop vendor_property_type;
+typeattribute vendor_mpctl_prop vendor_restricted_property_type;

@@ -1,0 +1,19 @@
+# Copyright (C) 2026 codfx
+# SPDX-License-Identifier: Apache-2.0
+
+# libril-qc-qmi-1.so and its QMI/dsutils libraries read persist.data.*, persist.qcril*,
+# persist.env.spec and persist.fci
+get_prop(rild, vendor_data_prop)
+get_prop(rild, vendor_qcril_prop)
+
+# The qcril blob keeps its SQLite database (qcril.db, qcril.db-journal) and iccid_* in
+# /data/misc/radio, a directory init.rc creates for the framework (radio_core_data_file). The path is
+# hard-coded in the blob, so a vendor domain has to work in a core /data directory: a Treble
+# violation that cannot be fixed in policy. Keep it as narrow as possible: rild only gets to add and
+# remove entries in that directory, and the files it creates there get their own type
+# (rild_qcril_data_file, also set by file_contexts so restorecon keeps it) instead of the
+# framework's radio_core_data_file.
+typeattribute rild data_between_core_and_vendor_violators;
+allow rild radio_core_data_file:dir rw_dir_perms;
+type_transition rild radio_core_data_file:file rild_qcril_data_file;
+allow rild rild_qcril_data_file:file create_file_perms;

@@ -1,0 +1,7 @@
+# Copyright (C) 2026 codfx
+# SPDX-License-Identifier: Apache-2.0
+
+# The loc HAL reads gps.disable, and its QMI/dsutils client libraries read persist.data.*
+# (persist.data.qmi.adb_logmask, persist.data.target, persist.net.logmask).
+get_prop(hal_gnss_default, vendor_data_prop)
+get_prop(hal_gnss_default, vendor_gps_prop)

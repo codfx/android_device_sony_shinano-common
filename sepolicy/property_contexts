@@ -1,9 +1,30 @@
+# Bluetooth
+ro.rfkilldisabled                    u:object_r:vendor_bluetooth_prop:s0
+
 # Camera
 hw.camera.0.status.                  u:object_r:camera_prop:s0
 hw.camera.1.status.                  u:object_r:camera_prop:s0
+persist.vendor.camera.privapp.list   u:object_r:vendor_camera_prop:s0
 
 # Credential Manager
 sys.credmgrdready                    u:object_r:credmgrd_prop:s0
+
+# GPS
+gps.disable                          u:object_r:vendor_gps_prop:s0
+
+# Modem and data stack
+persist.data.                        u:object_r:vendor_data_prop:s0
+persist.data_netmgrd_mtu             u:object_r:vendor_data_prop:s0
+persist.net.logmask                  u:object_r:vendor_data_prop:s0
+persist.rmnet.data.enable            u:object_r:vendor_data_prop:s0
+persist.env.spec                     u:object_r:vendor_qcril_prop:s0
+persist.fci                          u:object_r:vendor_qcril_prop:s0
+persist.qcril                        u:object_r:vendor_qcril_prop:s0
+
+# Sensors
+ro.qc.sensors.                       u:object_r:vendor_sensors_prop:s0
+ro.qti.sdk.sensors.                  u:object_r:vendor_sensors_prop:s0
+ro.qti.sensors.                      u:object_r:vendor_sensors_prop:s0
 
 # Trim Area
 persist.tareset.                     u:object_r:ta_prop:s0

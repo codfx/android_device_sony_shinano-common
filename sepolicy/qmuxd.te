@@ -1,0 +1,5 @@
+# Copyright (C) 2026 codfx
+# SPDX-License-Identifier: Apache-2.0
+
+# persist.data.qmi.adb_logmask
+get_prop(qmuxd, vendor_data_prop)

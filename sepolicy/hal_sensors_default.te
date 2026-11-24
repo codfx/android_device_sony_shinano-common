@@ -1,0 +1,5 @@
+# Copyright (C) 2026 codfx
+# SPDX-License-Identifier: Apache-2.0
+
+# libsensors.msm8974.so (loaded by sensors.msm8974.so) reads ro.qti.sensors.* and ro.qti.sdk.sensors.*
+get_prop(hal_sensors_default, vendor_sensors_prop)

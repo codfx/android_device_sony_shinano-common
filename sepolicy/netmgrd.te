@@ -1,0 +1,5 @@
+# Copyright (C) 2026 codfx
+# SPDX-License-Identifier: Apache-2.0
+
+# persist.data.* (df/qos/wda/iwlan/... settings), persist.net.logmask, persist.rmnet.data.enable
+get_prop(netmgrd, vendor_data_prop)

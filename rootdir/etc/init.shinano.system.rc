@@ -1,0 +1,22 @@
+# Copyright (C) 2026 codfx
+# SPDX-License-Identifier: Apache-2.0
+#
+# Triggers on system-owned properties (sys.*, init.svc.*, apexd.status). Under enforcing SELinux init rejects
+# such triggers in vendor rc files ("unexported property trigger": vendor_init may not read these properties),
+# so they live on the system partition, where init may use them without any extra SELinux permission.
+
+# Sony credential manager: credmgrfirstboot.sh sets sys.credmgrdready=true once /data/credmgr is ready.
+on property:sys.credmgrdready=true
+    start credmgrd
+
+# Restart the camera daemon when mediaserver or servicemanager restart.
+on property:init.svc.media=restarting
+    restart qcamerasvr
+
+on property:init.svc.servicemanager=restarting
+    restart qcamerasvr
+
+# The media swcodec APEX uses our linker config (configs/media/ld.config.txt, adds the platform and sphal
+# namespaces) instead of the one inside the APEX.
+on property:apexd.status=ready
+    mount none /system/etc/swcodec/ld.config.txt /apex/com.android.media.swcodec/etc/ld.config.txt bind

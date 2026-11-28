@@ -62,7 +62,6 @@ on init
     # Set the property to indicate type of virtual display to 0
     # 0 indicates that virtual display is not a Wifi display and that the
     # session is not exercised through RemoteDisplay in the android framework
-    setprop persist.sys.wfd.virtual 0
 
 on fs
     mount_all ./vendor/etc/fstab.qcom
@@ -187,12 +186,6 @@ on boot
     chown system system /sys/kernel/ipv4/tcp_use_userconfig
 
     # Define TCP delayed ack settings for WiFi & LTE
-    setprop net.tcp.delack.default     1
-    setprop net.tcp.delack.wifi        20
-    setprop net.tcp.delack.lte         8
-    setprop net.tcp.usercfg.default    0
-    setprop net.tcp.usercfg.wifi       1
-    setprop net.tcp.usercfg.lte        1
 
     # Assign TCP buffer thresholds to be ceiling value of technology maximums
     # Increased technology maximums should be reflected here.
@@ -336,7 +329,6 @@ on post-fs-data
     mkdir /data/audio 0770 media audio
 
     # Enable Power save functionality for modem
-    setprop persist.radio.add_power_save 1
 
     chown system /dev/block/platform/msm_sdcc.1/by-name
 
@@ -367,13 +359,6 @@ on property:sys.boot_completed=1
     # Enable ZRAM on boot_complete
     swapon_all /vendor/etc/fstab.qcom
 
-on property:bluetooth.isEnabled=true
-#    start btwlancoex
-    write /sys/class/bluetooth/hci0/idle_timeout 7000
-
-on property:apexd.status=ready
-    mount none /system/etc/swcodec/ld.config.txt /apex/com.android.media.swcodec/etc/ld.config.txt bind
-
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /vendor/bin/qmuxd
     class main
@@ -394,10 +379,6 @@ service qseecomd /vendor/bin/qseecomd
     class core
     user root
     group drmrpc root
-
-on property:ro.data.large_tcp_window_size=true
-    # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
-    write /proc/sys/net/ipv4/tcp_adv_win_scale 2
 
 service ril-daemon1 /vendor/bin/hw/rild -c 2
     class main

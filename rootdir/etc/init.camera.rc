@@ -67,8 +67,6 @@ on post-fs-data
 
     # SONY: Import MiscTA to System properties
     start property_taimport
-    setprop init.taimport.ready true
-    # taimport ready, use this as trigger for multi-cdf-symlinker
 
 service taimport /vendor/bin/taimport
     user root
@@ -88,11 +86,6 @@ service initcredmgr /vendor/bin/credmgrfirstboot.sh
     user system
     group system
     oneshot
-
-# When credmgrfirstboot is ready it set sys.credmgrdready=true.
-# Start credmgrd after that
-on property:sys.credmgrdready=true
-    start credmgrd
 
 # Start Credential manager daemon
 service credmgrd /vendor/bin/credmgrd
@@ -126,12 +119,6 @@ service qcamerasvr /vendor/bin/mm-qcamera-daemon
     class main
     user camera
     group camera media system inet input graphics
-
-on property:init.svc.media=restarting
-    restart qcamerasvr
-
-on property:init.svc.servicemanager=restarting
-    restart qcamerasvr
 
 # SONY: TrimArea Daemon
 # Last 2 args: start block(blk size 128k), number of blocks(partitionsize(kb)/128(kb))

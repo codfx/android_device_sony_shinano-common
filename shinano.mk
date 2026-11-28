@@ -136,6 +136,7 @@ PRODUCT_PACKAGES += \
     init.qcom.rc \
     init.recovery.qcom.rc \
     init.shinano.mediaserver.rc \
+    init.shinano.system.rc \
     init.sony.usb.rc \
     ueventd.qcom.rc
 

@@ -65,3 +65,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.semc.version.sw_type=user \
     ro.semc.version.fs_revision=23.5.A.1.291 \
     ro.semc.version.fs=GENERIC
+
+# adbd: legacy (blocking) FunctionFS USB - the 3.4 kernel has no FunctionFS AIO. Set here (system build.prop) rather
+# than from init.sony.usb.rc, where vendor_init may not set these properties under enforcing SELinux.
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.adb.nonblocking_ffs=0 \
+    ro.adb.nonblocking_ffs=0
